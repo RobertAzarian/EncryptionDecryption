@@ -1,24 +1,33 @@
 package encryptdecrypt;
 
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        String message = "we found a treasure!";
-        StringBuilder ciphertext = new StringBuilder();
+        Scanner scanner = new Scanner(System.in);
+        String message = scanner.nextLine();
+        int key = scanner.nextInt();
 
         char[] chars = message.toCharArray();
-        for(char ch : chars) {
+        StringBuilder sb = new StringBuilder();
+        for (char ch : chars) {
             int iCh = ch;
-            if (iCh >= 97 && iCh <= 122) {    // 97-109___110-122
-                if (iCh <= 109) {
-                    iCh += (109 - iCh) * 2 + 1;
+            if (iCh >= 97 && iCh <= 122) {
+                if (iCh + key > 122) {
+                    int k = key;
+                    while (iCh + k > 122) {
+                        k -= 122 - iCh + 1;
+                        iCh = 97;
+                    }
+                    iCh += k;
                 } else {
-                    iCh -= (iCh - 110) * 2 + 1;
+                    iCh += key;
                 }
-                ciphertext.append((char) iCh);
+                sb.append((char) iCh);
             } else {
-                ciphertext.append(ch);
+                sb.append(ch);
             }
         }
-        System.out.println(ciphertext);
+        System.out.println(sb);
     }
 }
