@@ -1,13 +1,18 @@
 package encryptdecrypt;
 
-import java.util.Scanner;
-
 public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        String operation = scanner.nextLine();
-        String message = scanner.nextLine();
-        int key = scanner.nextInt();
+    public static void main(String[] args) throws NumberFormatException {
+        String operation = "enc";
+        int key = 0;
+        String message = "";
+
+        for (int i = 0; i < args.length; i++) {
+            switch (args[i]) {
+                case "-mode" -> operation = "dec".equals(args[i + 1]) ? "dec" : "enc";
+                case "-key" -> key = Integer.parseInt(args[i + 1]);
+                case "-data" -> message = args[i + 1];
+            }
+        }
 
         System.out.println(operation(operation, message, key));
     }
