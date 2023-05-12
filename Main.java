@@ -5,29 +5,33 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        String operation = scanner.nextLine();
         String message = scanner.nextLine();
         int key = scanner.nextInt();
 
+        System.out.println(operation(operation, message, key));
+    }
+
+    public static String operation(String operation, String message, int key) {
         char[] chars = message.toCharArray();
         StringBuilder sb = new StringBuilder();
-        for (char ch : chars) {
-            int iCh = ch;
-            if (iCh >= 97 && iCh <= 122) {
-                if (iCh + key > 122) {
-                    int k = key;
-                    while (iCh + k > 122) {
-                        k -= 122 - iCh + 1;
-                        iCh = 97;
-                    }
-                    iCh += k;
-                } else {
-                    iCh += key;
+
+
+        switch (operation) {
+            case "enc" -> {
+                for (char ch : chars) {
+                    int iCh = ch + key;
+                    sb.append((char) iCh);
                 }
-                sb.append((char) iCh);
-            } else {
-                sb.append(ch);
             }
+            case "dec" -> {
+                for (char ch : chars) {
+                    int iCh = ch - key;
+                    sb.append((char) iCh);
+                }
+            }
+            default -> sb.append("Wrong operation input");
         }
-        System.out.println(sb);
+        return sb.toString();
     }
 }
