@@ -9,6 +9,7 @@ public class Main {
         String message = "";
         File fileOutput = null;
         File fileInput = null;
+        String algorithm = "shift";
 
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
@@ -17,8 +18,10 @@ public class Main {
                 case "-data" -> message = args[i + 1];
                 case "-in" -> fileInput = new File(args[i + 1]);
                 case "-out" -> fileOutput = new File(args[i + 1]);
+                case "-alg" -> algorithm = "unicode".equals(args[i + 1]) ? "unicode" : "shift";
             }
         }
+
         if (fileInput != null) {
             try (BufferedReader br = new BufferedReader(new FileReader(fileInput))) {
                 message = br.readLine();
@@ -26,7 +29,9 @@ public class Main {
                 throw new RuntimeException(e);
             }
         }
-        String result = operation(operation, message, key);
+
+        AlgorithmsFactory algorithmChoose = AlgorithmChoice.getAlgorithm(algorithm);
+        String result = algorithmChoose.operation(operation, message, key);
 
         if (fileOutput != null) {
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileOutput))) {
@@ -37,27 +42,5 @@ public class Main {
         } else {
             System.out.println(result);
         }
-    }
-
-    public static String operation(String operation, String message, int key) {
-        char[] chars = message.toCharArray();
-        StringBuilder sb = new StringBuilder();
-
-        switch (operation) {
-            case "enc" -> {
-                for (char ch : chars) {
-                    int iCh = ch + key;
-                    sb.append((char) iCh);
-                }
-            }
-            case "dec" -> {
-                for (char ch : chars) {
-                    int iCh = ch - key;
-                    sb.append((char) iCh);
-                }
-            }
-            default -> sb.append("Wrong operation input");
-        }
-        return sb.toString();
     }
 }
